@@ -236,72 +236,6 @@ WHERE email = 'your-email@example.com';
 
 ---
 
-## 📁 Project Structure
-
-```
-ministry-of-finance-platform/
-├── app/                          # Next.js App Router
-│   ├── (public)/                 # Public routes
-│   │   └── page.tsx             # Public dashboard
-│   ├── citizen/                 # Citizen portal
-│   │   ├── schemes/             # Browse schemes
-│   │   ├── eligibility/         # Check eligibility
-│   │   └── applications/        # Application management
-│   ├── analyst/                 # Analyst workspace
-│   │   ├── page.tsx            # Analytics dashboard
-│   │   ├── trends/             # AI trend analysis
-│   │   └── applications/       # Application review
-│   ├── admin/                   # Admin console
-│   │   ├── page.tsx            # Admin dashboard
-│   │   └── actions.ts          # Server actions
-│   ├── api/                     # API routes
-│   │   ├── schemes/            # Scheme CRUD
-│   │   └── applications/       # Application CRUD
-│   ├── login/                   # Citizen login
-│   ├── staff-login/            # Staff/admin login
-│   └── layout.tsx              # Root layout
-│
-├── components/                  # React components
-│   ├── ui/                     # shadcn/ui components
-│   ├── admin/                  # Admin-specific components
-│   ├── analyst/                # Analyst-specific components
-│   ├── dashboard/              # Dashboard components
-│   ├── auth-provider.tsx       # Authentication context
-│   └── main-nav.tsx            # Navigation component
-│
-├── lib/                         # Utilities and helpers
-│   ├── supabase/               # Supabase clients
-│   │   ├── client.ts          # Browser client
-│   │   ├── server.ts          # Server client
-│   │   └── middleware.ts      # Auth middleware
-│   ├── auth/                   # Authentication
-│   │   └── rbac.ts            # Role-based access control
-│   ├── audit/                  # Audit logging
-│   │   └── logger.ts          # Audit trail logger
-│   ├── ai/                     # AI service client
-│   │   └── client.ts          # FastAPI client
-│   └── logic/                  # Business logic
-│       └── eligibility.ts     # Eligibility rules engine
-│
-├── ai-service/                  # Python FastAPI service
-│   ├── main.py                 # AI endpoints
-│   ├── requirements.txt        # Python dependencies
-│   └── Dockerfile              # Container config
-│
-├── supabase/                    # Database scripts
-│   ├── schema.sql              # Database schema
-│   ├── seed.sql                # Sample data
-│   └── *.sql                   # Migration scripts
-│
-├── public/                      # Static assets
-├── .env.local.example          # Environment template
-├── AI-GOVERNANCE.md            # AI usage policy
-├── SECURITY.md                 # Security guidelines
-├── PRIVACY.md                  # Privacy policy
-└── README.md                   # This file
-```
-
----
 
 ## 👥 User Roles & Access
 
@@ -312,22 +246,7 @@ ministry-of-finance-platform/
 | **Analyst** | Staff | Review applications, access AI insights, approve/reject requests |
 | **Admin** | Full Access | User management, scheme management, system monitoring |
 
-### Role-Based Access Control (RBAC)
-
-```typescript
-// Example: Protecting analyst routes
-export async function middleware(request: NextRequest) {
-  const user = await getUser();
-  
-  if (!user || !['analyst', 'admin'].includes(user.role)) {
-    return NextResponse.redirect('/login');
-  }
-  
-  return NextResponse.next();
-}
-```
-
----
+#
 
 ## 🤖 AI Governance
 
@@ -403,78 +322,6 @@ See [SECURITY.md](./SECURITY.md) for detailed security practices.
 
 ---
 
-## 🗄️ Database Schema
-
-### Core Tables
-
-#### `profiles`
-User profiles with role-based access control.
-
-```sql
-CREATE TABLE profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id),
-  email TEXT UNIQUE NOT NULL,
-  full_name TEXT,
-  role TEXT CHECK (role IN ('citizen', 'analyst', 'admin')),
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-#### `schemes`
-Government welfare schemes.
-
-```sql
-CREATE TABLE schemes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  description TEXT,
-  eligibility_criteria JSONB,
-  benefit_amount NUMERIC,
-  is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-#### `applications`
-Citizen applications for schemes.
-
-```sql
-CREATE TABLE applications (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  citizen_id UUID REFERENCES profiles(id),
-  scheme_id UUID REFERENCES schemes(id),
-  status TEXT CHECK (status IN ('pending', 'approved', 'rejected')),
-  submitted_data JSONB,
-  reviewed_by UUID REFERENCES profiles(id),
-  reviewed_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-#### `audit_logs`
-Comprehensive audit trail.
-
-```sql
-CREATE TABLE audit_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES profiles(id),
-  action TEXT NOT NULL,
-  entity_type TEXT,
-  entity_id TEXT,
-  metadata JSONB,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-```
-
-### Row-Level Security (RLS)
-
-All tables have RLS policies enforcing:
-- Citizens can only view their own applications
-- Analysts can view all applications but only update assigned ones
-- Admins have full access
-- Public users can view active schemes only
-
----
 
 ## 📡 API Documentation
 
@@ -657,28 +504,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ---
 
-## 🗺️ Roadmap
 
-### Phase 1 (Current)
-- ✅ Core platform with 4 user roles
-- ✅ AI-assisted analytics
-- ✅ Audit logging
-- ✅ Scheme management
-
-### Phase 2 (Planned)
-- [ ] Mobile app (React Native)
-- [ ] Advanced AI models (time series forecasting)
-- [ ] Multi-language support
-- [ ] PDF report generation
-- [ ] Email notifications
-
-### Phase 3 (Future)
-- [ ] Integration with payment gateways
-- [ ] Blockchain-based audit trail
-- [ ] Real-time collaboration features
-- [ ] Advanced data visualization
-
----
 
 <div align="center">
 
