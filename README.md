@@ -173,34 +173,6 @@ graph TB
 - **Supabase Account** (free tier works)
 - **Git**
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/JesseSathyadas/ministry-of-finance-platform.git
-cd ministry-of-finance-platform
-```
-
-### 2. Set Up Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```bash
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
-
-# AI Service Configuration
-NEXT_PUBLIC_AI_SERVICE_URL=http://localhost:8000
-
-# Application Configuration
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-```
-
-**Get Supabase credentials:**
-1. Go to [Supabase Dashboard](https://app.supabase.com/)
-2. Navigate to **Settings** > **API**
-3. Copy Project URL, anon key, and service_role key
 
 ### 3. Set Up Database
 
